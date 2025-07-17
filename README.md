@@ -77,7 +77,8 @@ This driver library targets the following hardware:
        initArudino();
        Serial.begin((unsigned long) COFFEE_BAUD_RATE);
 
-       coffee::init_driver();
+       if(!coffee::init_driver())
+           return;
 
        // ...
    }
