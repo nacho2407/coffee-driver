@@ -44,7 +44,7 @@ namespace coffee
 
     void list_all(fs::FS& fs)
     {
-        Serial.println("root: /\n");
+        Serial.println("root: /");
         
         list_dir(fs, "/", 0);
     }
