@@ -1,8 +1,8 @@
 # coffee-driver
 
-ESP-IDF 기반 디스플레이 드라이버 라이브러리
+ESP-IDF 기반 Elecrow CrowPanel 드라이버 라이브러리
 
-ESP-IDF-based display driver library
+ESP-IDF-based Elecrow CrowPanel driver library
 
 
 ## Display
