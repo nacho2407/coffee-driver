@@ -85,6 +85,13 @@ This driver library targets the following hardware:
    ```
 
 
+### ESP-IDF Configuration
+
+프로젝트에 필요한 ESP-IDF 설정들은 [`sdkconfig`](./sdkconfig)에 모두 포함되어 있습니다.
+
+The ESP-IDF settings required for the project are all contained in [`sdkconfig`](./sdkconfig).
+
+
 ## Dependencies
 
 이 라이브러리를 사용하려면 다음 라이브러리들이 포함되어 있어야 합니다.
