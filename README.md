@@ -61,9 +61,9 @@ This driver library targets the following hardware:
 
    ```
 
-3. 메인 소스에서 다음과 같이 [`driver.hpp`](./driver.hpp)를 통해 드라이버를 초기화합니다.
+3. 메인 소스에서 다음과 같이 [`driver.hpp`](./src/driver.hpp)를 통해 드라이버를 초기화합니다.
 
-   In the main source, initialize the driver via [`driver.hpp`](./driver.hpp) like this:
+   In the main source, initialize the driver via [`driver.hpp`](./src/driver.hpp) like this:
 
    ```C++
    #include <Arduino.h>
