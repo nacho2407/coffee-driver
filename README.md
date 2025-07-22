@@ -46,9 +46,9 @@ This driver library targets the following hardware:
 
 ## How to use
 
-1. [`src`](./src/) 디렉토리의 이름을 `coffee-driver`로 변경하여 ESP-IDF 프로젝트 디렉토리 내 `component` 디렉토리에 추가합니다.
+1. ESP-IDF 프로젝트 디렉토리 내 `component` 디렉토리에 이 프로젝트를 추가합니다.
 
-   Rename the [`src`](./src/) directory to `coffee-driver` and add it to the `component` directory inside your ESP-IDF project directory.
+   Add this project to the `component` directory inside your ESP-IDF project directory.
 
 2. 메인 디렉토리의 루트 CMakeLists에 다음과 같이 컴포넌트를 추가합니다.
 
@@ -75,9 +75,9 @@ This driver library targets the following hardware:
    extern "C" void app_main(void)
    {
        initArudino();
-       Serial.begin((unsigned long) COFFEE_BAUD_RATE);
+       Serial.begin(COFFEE_BAUD_RATE);
 
-       if(!coffee::init_driver())
+       if(!coffee::init_drivers())
            return;
 
        // ...
