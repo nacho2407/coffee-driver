@@ -1,11 +1,15 @@
 #ifndef COFFEE_SD_HPP
 #define COFFEE_SD_HPP
 
+#include <string.h>
+
 #include <Arduino.h>
 
 #include <FS.h>
 #include <SD.h>
 #include <SPI.h>
+
+#include <lvgl.h>
 
 #include "def.h"
 
@@ -27,6 +31,24 @@
  */
 #define COFFEE_SPI_CLK 80000000
 
+/**
+ * @def COFFEE_LIST_FILES
+ * 
+ * @brief SD 카드가 초기화될 때, SD 카드 내 모든 파일 목록을 출력하려면 이 값을 1로 설정합니다
+ * 
+ *        set this value to 1 to print a list of all files on the SD card when it is initialized
+ */
+#define COFFEE_LIST_FILES 0
+
+/**
+ * @def COFFEE_FS_LETTER
+ * 
+ * @brief LVGL 드라이버 식별 문자(대문자 알파벳)
+ * 
+ *        the drive letter(capitalized alphabet) used by LVGL to identify this file system
+ */
+#define COFFEE_FS_LETTER 'S'
+
 namespace coffee
 {
     /**
@@ -34,40 +56,40 @@ namespace coffee
      * 
      *        initializes the SD card
      * 
+     * @param fs_letter LVGL 드라이버 식별 문자(대문자 알파벳)
+     * 
+     *                  the drive letter(capitalized alphabet) used by LVGL to identify this file system
+     * 
      * @return SD 카드 초기화 성공 여부
      * 
      *         SD card initialization success
      */
-    bool init_sd(void);
+    bool init_sd(char fs_letter);
+
+    /**
+     * @brief 파일 시스템 내의 모든 파일을 표시합니다
+     * 
+     *        lists all files in the file system
+     */
+    void list_all(void);
 
     /**
      * @brief 디렉토리 내의 모든 파일들을 표시합니다
      * 
      *        lists all files in a directory
      * 
-     * @param fs 읽어 들일 파일 시스템
+     * @param root 읽어 들일 파일 시스템 내 디렉토리
      * 
-     *           file system to read
+     *             directory in the file system to read
      * 
-     * @param dir 읽어 들일 파일 시스템 내 디렉토리
+     * @param dir_name 읽어 들일 디렉토리의 이름
      * 
-     *            directory in the file system to read
+     *                 directory name to read
      * 
      * @param depth 디렉토리의 깊이
      * 
      *              depth of the directory
      */
-    void list_dir(fs::FS& fs, const char* dir, uint8_t depth);
-
-    /**
-     * @brief 파일 시스템 내의 모든 파일을 표시합니다
-     * 
-     *        lists all files in the file system
-     * 
-     * @param fs 읽어 들일 파일 시스템
-     * 
-     *           file system to read
-     */
-    void list_all(fs::FS& fs);
+    void list_dir(File& root, const char* dir_name, uint8_t depth = 0);
 }
 #endif

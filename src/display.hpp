@@ -3,7 +3,6 @@
 
 #include <driver/i2c.h>
 #include <esp_heap_caps.h>
-#include <string.h>
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -38,6 +37,15 @@
 
 #define COFFEE_BACKLIGHT 2
 
+/**
+ * @def COFFEE_BRIGHTNESS
+ * 
+ * @brief 이 값을 수정하여 화면 밝기를 조절할 수 있습니다(0-255)
+ * 
+ *        screen brightness can be modified by adjusting this value(0-255)
+ */
+#define COFFEE_BRIGHTNESS 255
+
 namespace coffee
 {
     class LCD: public lgfx::LGFX_Device
@@ -61,8 +69,12 @@ namespace coffee
      * @brief 디스플레이 운용에 필요한 각종 IO 핀들을 초기화합니다
      * 
      *        initializes the various IO pins required for display operation
+     * 
+     * @return IO 핀 초기화 성공 여부
+     * 
+     *         IO pin initialization success
      */
-    void init_IO(void);
+    bool init_IO(void);
 
     /**
      * @brief LCD를 초기화합니다
@@ -74,31 +86,5 @@ namespace coffee
      *         LCD initialization success
      */
     bool init_lcd(void);
-
-    /**
-     * @brief 백라이트를 켭니다
-     * 
-     *        turns on the backlight
-     */
-    void turn_on_bl(void);
-
-    /**
-     * @brief 화면에 출력할 내용을 쓰고 플러시합니다
-     * 
-     *        writes and flushes the image to be displayed on the screen
-     * 
-     * @param disp_drv 디스플레이 관련 작업을 수행하기 위한 LVGL 드라이버 객체
-     * 
-     *                 LVGL display driver object used for display-related operations
-     * 
-     * @param area 디스플레이를 나타내는 직사각형 영역
-     * 
-     *             rectangular area of the display to update
-     * 
-     * @param image 화면에 실제 그려질 픽셀 색 정보 배열
-     * 
-     *              array of pixel color values to be drawn
-     */
-    void flush_disp(lv_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* image);
 }
 #endif

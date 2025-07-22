@@ -2,6 +2,20 @@
 
 namespace coffee
 {
+    /**
+     * @brief 백라이트를 켭니다
+     * 
+     *        turns on the backlight
+     */
+    static void turn_on_bl(void);
+
+    /**
+     * @brief lv_hal_disp에서 화면을 플러싱할 때 콜백됩니다
+     * 
+     *        called by lv_hal_disp to flush a region of the display
+     */
+    static void flush_disp(lv_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* image);
+
     LCD lcd;
 
     // 화면에 실제 그려질 픽셀 색 정보 배열
@@ -14,10 +28,10 @@ namespace coffee
             // 패널 기본 정보 설정
             // set panel preferences
             auto cfg = _panel.config();
-            cfg.memory_width = (uint16_t) COFFEE_WIDTH;
-            cfg.memory_height = (uint16_t) COFFEE_HEIGHT;
-            cfg.panel_width = (uint16_t) COFFEE_WIDTH;
-            cfg.panel_height = (uint16_t) COFFEE_HEIGHT;
+            cfg.memory_width = COFFEE_WIDTH;
+            cfg.memory_height = COFFEE_HEIGHT;
+            cfg.panel_width = COFFEE_WIDTH;
+            cfg.panel_height = COFFEE_HEIGHT;
             cfg.offset_x = 0;
             cfg.offset_y = 0;
             _panel.config(cfg);
@@ -76,7 +90,7 @@ namespace coffee
         setPanel(&_panel);
     }
 
-    void init_IO(void)
+    bool init_IO(void)
     {
         // IO 확장용 칩
         // chip for IO expansion
@@ -89,7 +103,11 @@ namespace coffee
         
         // PCA9557 설정
         // configurates PCA9557
-        Wire.begin(19, 20);
+        if(!Wire.begin(19, 20)) {
+            Serial.println("error: failed to initialize IO pins");
+            
+            return false;
+        }
 
         pca9557.reset();
         pca9557.setMode(IO_OUTPUT);
@@ -101,32 +119,39 @@ namespace coffee
         pca9557.setState(IO0, IO_HIGH);
         delay(100);
         pca9557.setMode(IO1, IO_INPUT);
+
+        return true;
     }
 
     bool init_lcd(void)
     {
+        // LVGL 디스플레이 드라이버
+        // LVGL display driver
+        static lv_disp_drv_t disp_drv;
+
         // 화면에 그려질 데이터 배열
         // data buffer to be drawn to the screen
         static lv_disp_draw_buf_t draw_buf;
 
-        // 디스플레이 관련 작업을 수행하기 위한 LVGL 드라이버 객체
-        // LVGL display driver object used for display-related operations
-        static lv_disp_drv_t disp_drv;
+        if(!lcd.begin()) {
+            Serial.println("error: failed to initialize LCD driver");
 
-        if (!lcd.begin())
             return false;
-
-        lcd.fillScreen(TFT_BLACK);
-        lcd.setTextSize(3);
+        }
         delay(100);
 
-        uint32_t pixel_size = (uint32_t) COFFEE_WIDTH * COFFEE_HEIGHT / COFFEE_DISP_BUF_BLOCKS;
+        lcd.setTextSize(3);
+
+        uint32_t pixel_size = COFFEE_WIDTH * COFFEE_HEIGHT / COFFEE_DISP_BUF_BLOCKS;
 
         // 화면 버퍼는 내부 메모리 상 DMA 영역에 할당
         // the screen buffer is allocated in a DMA area on internal memory
         pixels = (lv_color_t*) heap_caps_malloc(sizeof(lv_color_t) * pixel_size, MALLOC_CAP_DMA);
-        if (!pixels)
+        if(!pixels) {
+            Serial.println("error: failed to allocate display buffer");
+            
             return false;
+        }
         
         lv_init();
 
@@ -141,30 +166,26 @@ namespace coffee
         
         lv_disp_drv_register(&disp_drv);
 
+        turn_on_bl();
+
         return true;
     }
 
-    void turn_on_bl(void)
+    static void turn_on_bl(void)
     {
         ledcSetup(1, 300, 8);
 
-        ledcAttachPin((uint8_t) COFFEE_BACKLIGHT, 1);
-
-        // 두 번째 매개변수를 수정하여 화면 밝기를 조절할 수 있습니다(0-255)
-        // screen brightness can be modified by adjusting second parameter(0-255)
+        ledcAttachPin(COFFEE_BACKLIGHT, 1);
+        
         ledcWrite(1, 0);
-
-        pinMode((uint8_t) COFFEE_BACKLIGHT, OUTPUT);
-
-        digitalWrite((uint8_t) COFFEE_BACKLIGHT, LOW);
         delay(500);
-
-        digitalWrite((uint8_t) COFFEE_BACKLIGHT, HIGH);
+        
+        ledcWrite(1, COFFEE_BRIGHTNESS);
 
         lcd.fillScreen(TFT_BLACK);
     }
 
-    void flush_disp(lv_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* pixels)
+    static void flush_disp(lv_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* pixels)
     {
         int32_t img_w = area->x2 - area->x1 + 1;
         int32_t img_h = area->y2 - area->y1 + 1;
