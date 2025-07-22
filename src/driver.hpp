@@ -17,6 +17,6 @@ namespace coffee
      * 
      *         initialization success
      */
-    bool init_driver(void);
+    bool init_drivers(void);
 }
 #endif

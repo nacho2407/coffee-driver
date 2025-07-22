@@ -28,7 +28,7 @@
  * 
  *        set this value to 1 to print the touch position whenever a touch event occurs
  */
-#define COFFEE_PRINT_TOUCH 1
+#define COFFEE_PRINT_TOUCH 0
 
 namespace coffee
 {
@@ -56,31 +56,5 @@ namespace coffee
      *         touch screen initialization success
      */
     bool init_touch(void);
-
-    /**
-     * @brief 터치를 감지하면 마지막으로 터치된 위치를 last_x와 last_y에 저장합니다
-     * 
-     *        detects touch and stores the last touched position in last_x and last_y
-     * 
-     * @return 터치 감지 여부
-     * 
-     *         whether touch is detected
-     */
-    bool is_touched(void);
-
-    /**
-     * @brief 터치 정보를 읽고 해당 정보를 처리합니다
-     * 
-     *        reads the current touch state and updates the input data accordingly
-     * 
-     * @param indev_driver 터치 관련 작업을 처리하는 LVGL 입력 드라이버
-     * 
-     *                     LVGL input device driver object that manages touch input handling
-     * 
-     * @param indev_data 터치 관련 정보를 포함하는 LVGL 입력 데이터 구조체
-     * 
-     *                   the structure that will be filled with the current touch data(position and state)
-     */
-    void read_touch(lv_indev_drv_t* indev_driver, lv_indev_data_t* indev_data);
 }
 #endif

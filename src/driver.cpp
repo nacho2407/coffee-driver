@@ -2,29 +2,19 @@
 
 namespace coffee
 {
-    bool init_driver(void)
+    bool init_drivers(void)
     {
-        init_IO();
-
-        if(!init_lcd()) {
-            Serial.println("Error: failed to initialize LCD driver");
-
+        if(!init_IO())
             return false;
-        }
 
-        if(!init_touch()) {
-            Serial.println("Error: failed to initialize touch driver");
-
+        if(!init_lcd())
             return false;
-        }
 
-        turn_on_bl();
-
-        if(!init_sd()) {
-            Serial.println("Error: failed to initialize sd card driver");
-
+        if(!init_touch())
             return false;
-        }
+
+        if(!init_sd(COFFEE_FS_LETTER))
+            return false;
 
         return true;
     }
