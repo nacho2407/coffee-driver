@@ -3,17 +3,17 @@
 namespace coffee
 {
     /**
-     * @brief LVGL에서 관리되는 파일 시스템을 현재 사용중인 Arduino 파일 시스템과 연동합니다
+     * @brief lvgl에서 관리되는 파일 시스템을 현재 사용중인 Arduino 파일 시스템과 연동합니다
      * 
-     *        Connects the LVGL-managed file system to the currently used Arduino file system
+     *        Connects the lvgl-managed file system to the currently used Arduino file system
      * 
-     * @param fs_letter LVGL 드라이버 식별 문자(대문자 알파벳)
+     * @param fs_letter lvgl 드라이버 식별 문자(대문자 알파벳)
      * 
-     *                  the drive letter(capitalized alphabet) used by LVGL to identify this file system
+     *                  the drive letter(capitalized alphabet) used by lvgl to identify this file system
      * 
-     * @return LVGL 파일 시스템 초기화 성공 여부
+     * @return lvgl 파일 시스템 초기화 성공 여부
      * 
-     *         LVGL file system initialization success
+     *         lvgl file system initialization success
      */
     static bool init_lv_fs(char fs_letter);
 
@@ -136,8 +136,8 @@ namespace coffee
 
     static bool init_lv_fs(char fs_letter)
     {
-        // LVGL 파일 시스템 드라이버
-        // LVGL file system driver
+        // lvgl 파일 시스템 드라이버
+        // lvgl file system driver
         static lv_fs_drv_t drv;
 
         if(fs_letter <= 'A' || fs_letter >= 'Z') {

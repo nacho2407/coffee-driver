@@ -30,8 +30,8 @@ namespace coffee
 
     bool init_touch(void)
     {
-        // LVGL 터치 드라이버
-        // LVGL touch driver
+        // lvgl 터치 드라이버
+        // lvgl touch driver
         static lv_indev_drv_t indev_drv;
         
         if(!Wire.begin(COFFEE_GT911_SDA, COFFEE_GT911_SCL)) {

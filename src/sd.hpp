@@ -43,9 +43,9 @@
 /**
  * @def COFFEE_FS_LETTER
  * 
- * @brief LVGL 드라이버 식별 문자(대문자 알파벳)
+ * @brief lvgl 드라이버 식별 문자(대문자 알파벳)
  * 
- *        the drive letter(capitalized alphabet) used by LVGL to identify this file system
+ *        the drive letter(capitalized alphabet) used by lvgl to identify this file system
  */
 #define COFFEE_FS_LETTER 'S'
 
@@ -56,9 +56,9 @@ namespace coffee
      * 
      *        initializes the SD card
      * 
-     * @param fs_letter LVGL 드라이버 식별 문자(대문자 알파벳)
+     * @param fs_letter lvgl 드라이버 식별 문자(대문자 알파벳)
      * 
-     *                  the drive letter(capitalized alphabet) used by LVGL to identify this file system
+     *                  the drive letter(capitalized alphabet) used by lvgl to identify this file system
      * 
      * @return SD 카드 초기화 성공 여부
      * 

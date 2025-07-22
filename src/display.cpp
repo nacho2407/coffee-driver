@@ -125,8 +125,8 @@ namespace coffee
 
     bool init_lcd(void)
     {
-        // LVGL 디스플레이 드라이버
-        // LVGL display driver
+        // lvgl 디스플레이 드라이버
+        // lvgl display driver
         static lv_disp_drv_t disp_drv;
 
         // 화면에 그려질 데이터 배열
