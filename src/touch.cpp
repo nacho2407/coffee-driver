@@ -58,7 +58,7 @@ namespace coffee
     {
         touch.read();
 
-        if (touch.isTouched) {
+        if(touch.isTouched) {
             last_x = map(touch.points[0].x, COFFEE_MAP_X1, COFFEE_MAP_X2, 0, COFFEE_WIDTH - 1);
             last_y = map(touch.points[0].y, COFFEE_MAP_Y1, COFFEE_MAP_Y2, 0, COFFEE_HEIGHT - 1);
 
@@ -69,7 +69,7 @@ namespace coffee
 
     static void read_touch(lv_indev_drv_t* indev_driver, lv_indev_data_t* indev_data)
     {
-        if (is_touched()) {
+        if(is_touched()) {
             indev_data->state = LV_INDEV_STATE_PR;
 
             indev_data->point.x = last_x;

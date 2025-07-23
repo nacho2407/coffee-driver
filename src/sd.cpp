@@ -82,11 +82,9 @@ namespace coffee
 
     bool init_sd(char fs_letter)
     {
-        SPIClass spi_bus;
+        SPI.begin(COFFEE_SD_SCK, COFFEE_SD_MISO, COFFEE_SD_MOSI, COFFEE_SD_CS);
 
-        spi_bus.begin(COFFEE_SD_SCK, COFFEE_SD_MISO, COFFEE_SD_MOSI, COFFEE_SD_CS);
-
-        if (!SD.begin(COFFEE_SD_CS, spi_bus, COFFEE_SPI_CLK)) {
+        if(!SD.begin(COFFEE_SD_CS, SPI, COFFEE_SPI_CLK)) {
             Serial.println("error: failed to initialize SD card driver");
 
             return false;
@@ -112,7 +110,7 @@ namespace coffee
 
     void list_dir(File& root, const char* dir_name, uint8_t depth)
     {
-        if (!root || !root.isDirectory()) {
+        if(!root || !root.isDirectory()) {
             Serial.printf("error: not a directory, or cannot be opened(%s)\n", dir_name);
 
             return;
@@ -125,7 +123,7 @@ namespace coffee
         while (file) {
             const char* file_name = file.name();
 
-            if (file.isDirectory())
+            if(file.isDirectory())
                 list_dir(file, file_name, depth + 1);
             else
                 Serial.printf("%*s%s(%dB)\n", (depth + 1) * 4, "", file_name, file.size());
@@ -140,7 +138,7 @@ namespace coffee
         // lvgl file system driver
         static lv_fs_drv_t drv;
 
-        if(fs_letter <= 'A' || fs_letter >= 'Z') {
+        if(fs_letter < 'A' || fs_letter > 'Z') {
             Serial.println("error: the file driver identification character must be an uppercase alphabet");
 
             return false;
@@ -151,7 +149,7 @@ namespace coffee
         drv.letter = fs_letter;
         drv.cache_size = 0;
 
-        drv.read_cb = nullptr;
+        drv.ready_cb = nullptr;
 
         drv.open_cb = open_file;
         drv.close_cb = close_file;
@@ -178,11 +176,14 @@ namespace coffee
         if(!mode_str)
             return nullptr;
 
-        File file = SD.open(path, mode_str);
-        if (!file || !file.available())
-            return nullptr;
+        File* file = new File(SD.open(path, mode_str));
+        if(!*file || !file->available()) {
+            delete file;
 
-        return new File(file);
+            return nullptr;
+        }
+
+        return file;
     }
 
     static lv_fs_res_t close_file(lv_fs_drv_t* drv, void* file_p)
